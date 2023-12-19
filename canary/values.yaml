@@ -1,0 +1,14 @@
+v1:
+  enabled: true
+  name: python-app-1
+  image: simbu1290/nginx-canary-test:v2
+  service_name: python-service-1
+
+v2:
+  enabled: true
+  name: python-app-2
+  image: simbu1290/nginx-canary-test:v1
+  service_name: python-service-2
+
+canary:
+  weight: 20

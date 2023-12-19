@@ -1,0 +1,39 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.v2.name }}-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.v2.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.v2.name }}
+    spec:
+      containers:
+      - name: {{ .Values.v2.name }}
+        image: {{ .Values.v2.image }}
+        volumeMounts:
+        - mountPath: "/app/uploads"
+          name: efs-volume
+      volumes:
+      - name: efs-volume
+        persistentVolumeClaim:
+          claimName: efs-claim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: python-service-2
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 5000
+  selector:
+    app: {{ .Values.v2.name }}
+  sessionAffinity: None
+  type: NodePort
